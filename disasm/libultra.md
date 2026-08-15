@@ -368,7 +368,7 @@ ImGui) work. Remaining candidate space (in likelihood order):
    `RT64::Application::windowMessageFilter`/`sdlEventFilter` from the recompui window loop.)
 2. **GPU readback of the vertex defaultBuffer** (fix the crashed plume readback: 256-byte row
    alignment, correct RenderTextureCopyLocation usage, do it OUTSIDE an open command list).
-3. **Build & run BMHero on this machine** (source at C:\Users\selki\depot\BMHeroRecomp, no exe
+3. **Build & run BMHero on this machine** (source in the sibling `BMHeroRecomp` checkout, no exe
    built) — same stack; if IT also renders black here, the problem is this build environment
    (clang-cl 19.1.5 flags / DXC version / driver), not WCW-specific code.
 4. Diff our RT64/N64ModernRuntime build flags vs BMHero's documented working configuration.

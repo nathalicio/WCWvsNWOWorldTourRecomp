@@ -104,8 +104,8 @@ This is **not** an emulator and **not** a decompilation. Static recompilation tr
 the game's binary one MIPS instruction at a time into equivalent C. No game assets are
 distributed; the user supplies their own ROM.
 
-The reference project for everything here is **Bomberman Hero: Recompiled** at
-`C:\Users\selki\depot\BMHeroRecomp` â€” when in doubt, mirror how it does something.
+The reference project for everything here is **Bomberman Hero: Recompiled** in
+the sibling `BMHeroRecomp/` checkout â€” when in doubt, mirror how it does something.
 
 ## Status at a glance (Phase 3 in progress)
 
@@ -200,11 +200,11 @@ diagnostic harness with `run/build.ps1`.
 
 | Thing | Path |
 |-------|------|
-| This project | `C:\Users\selki\depot\WcwNwoWorldTour` |
-| N64Recomp framework (source, unbuilt) | `C:\Users\selki\depot\N64Recomp` |
-| Reference port (Bomberman Hero) | `C:\Users\selki\depot\BMHeroRecomp` |
-| ROMs | `C:\Users\selki\depot\roms` |
-| WCW ROM | `C:\Users\selki\depot\roms\WCW vs. nWo - World Tour (USA)\WCW vs. nWo - World Tour (USA).z64` |
+| This project | `<workspace>\WcwNwoWorldTour` |
+| N64Recomp framework (source, unbuilt) | `<workspace>\N64Recomp` |
+| Reference port (Bomberman Hero) | `<workspace>\BMHeroRecomp` |
+| ROMs | `<workspace>\roms` |
+| WCW ROM | `<workspace>\roms\WCW vs. nWo - World Tour (USA)\WCW vs. nWo - World Tour (USA).z64` |
 
 The environment is Windows 11 + PowerShell. The toolchain (clang, ld.lld, make) targets
 the same setup BMHero documents in its `BUILDING.md`.
@@ -445,10 +445,10 @@ Still NOT done (later phases):
   resolution against data_dump.toml (lui/lw of the exact vram). Sharp edges discovered:
   1. **No Windows clang has a MIPS backend** â€” BOTH VS BuildTools' LLVM and the official
      llvm.org Windows binaries are trimmed to x86/ARM. The MIPS compiler is **`zig cc`**
-     (`C:\Users\selki\toolchains\zig-windows-x86_64-0.14.0`, bundles full LLVM 19; flags:
+     (`<toolchains>\zig-windows-x86_64-0.14.0`, bundles full LLVM 19; flags:
      `-target mips-freestanding-none -mcpu=mips2`, emits the same non-PIC R_MIPS_HI16/LO16/26
      relocs). **ld.lld's MIPS support is unconditional**, so the llvm.org 19.1.5 toolchain
-     (`C:\Users\selki\toolchains\clang+llvm-19.1.5-...`) links patches.elf fine.
+     (`<toolchains>\clang+llvm-19.1.5-...`) links patches.elf fine.
   2. **Link order is the patch mechanism**: PatchesLib MUST precede RecompiledFuncs in
      `target_link_libraries` â€” patched funcs share their C symbol with the base recompiled
      copies and take effect by winning static-lib resolution (silently inert if reversed).
@@ -820,7 +820,7 @@ Alternatively, author `syms/dump.toml` directly, but for a 12 MiB commercial gam
 disassembly route is far more practical.
 
 ### Phase 2 â€” Build the recompiler and run it
-1. Build N64Recomp: `cmake` + `cmake --build` in `C:\Users\selki\depot\N64Recomp`
+1. Build N64Recomp: `cmake` + `cmake --build` in the sibling `N64Recomp` checkout
    (needs CMake â‰¥ 3.20, a C++20 compiler, submodules initialized recursively).
 2. Copy `N64Recomp.exe` and `RSPRecomp.exe` to this project root.
 3. Run `.\N64Recomp wcw.toml` â†’ populates `RecompiledFuncs/`.
