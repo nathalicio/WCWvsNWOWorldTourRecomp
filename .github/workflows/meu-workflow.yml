@@ -9,7 +9,7 @@ jobs:
   build-switch:
     runs-on: ubuntu-latest
     container:
-      image: devkitpro/devkitswitch:latest
+      image: ghcr.io/devkitpro/devkitswitch:latest
 
     steps:
       - name: Checkout repository
