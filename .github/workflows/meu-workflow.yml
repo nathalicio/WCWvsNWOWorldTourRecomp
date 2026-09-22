@@ -3,13 +3,13 @@ name: Build Nintendo Switch NRO
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
   build-switch:
     runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkitswitch:latest
 
     steps:
       - name: Checkout repository
@@ -17,24 +17,20 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Setup devkitPro & switch-dev
+      - name: Configure CMake for Switch
         run: |
-          sudo apt-get update && sudo apt-get install -y wget ca-certificates build-essential cmake ninja-build
-          wget https://apt.devkitpro.org/devkitpro-keyring.gpg
-          sudo install -m 644 devkitpro-keyring.gpg /usr/share/keyrings/
-          echo "deb [signed-by=/usr/share/keyrings/devkitpro-keyring.gpg] https://apt.devkitpro.org stable main" | sudo tee /etc/apt/sources.list.d/devkitpro.list
-          sudo apt-get update
-          sudo apt-get install -y switch-dev
+          cmake -B build -G Ninja \
+            -DCMAKE_TOOLCHAIN_FILE=/opt/devkitpro/cmake/Switch.cmake \
+            -DCMAKE_BUILD_TYPE=Release
 
-      - name: Build NRO
+      - name: Build Project
         run: |
-          source /etc/profile.d/devkit-env.sh
-          make
+          cmake --build build --config Release
 
       - name: Upload NRO Artifact
         uses: actions/upload-artifact@v4
         with:
           name: switch-build
           path: |
-            *.nro
             build/*.nro
+            *.nro
